@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout(content=~{::#content}, title=~{::#title}, script=~{::#script}, banner=~{::#banner})}">
+<head>
+    <title id="title">Import Contacts - Data Manager</title>
+    <th:block id="script">
+        <script>
+            console.log("In Contact Import Page");
+            document.addEventListener('DOMContentLoaded', function() {
+                const fileInput = document.getElementById('csvFile');
+                const fileName = document.getElementById('fileName');
+                if (fileInput) {
+                    fileInput.addEventListener('change', function(e) {
+                        if (e.target.files.length > 0) {
+                            fileName.textContent = e.target.files[0].name;
+                            fileName.classList.remove('hidden');
+                        }
+                    });
+                }
+            });
+        </script>
+    </th:block>
+</head>
+<body>
+    <th:block id="banner" th:replace="~{fragments/banner :: simple('Import Contacts', 'Upload a CSV file to import multiple contacts')}"></th:block>
+
+    <div id="content" class="py-12">
+        <div th:fragment="content" class="max-w-4xl mx-auto px-4">
+            <div class="mb-6">
+                <a th:href="@{/user/contacts}" class="text-blue-600 hover:text-blue-700 font-medium">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Contacts
+                </a>
+            </div>
+
+            <div th:if="${successMessage}" class="mb-6 bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg">
+                <i class="fas fa-check-circle mr-2"></i><span th:text="${successMessage}"></span>
+            </div>
+            <div th:if="${errorMessage}" class="mb-6 bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
+                <i class="fas fa-exclamation-circle mr-2"></i><span th:text="${errorMessage}"></span>
+            </div>
+
+            <div class="bg-white p-8 rounded-lg shadow-lg border border-gray-200 mb-8">
+                <div class="flex items-center mb-6">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                        <i class="fas fa-file-upload text-blue-600 text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-semibold text-gray-800">Upload CSV File</h2>
+                </div>
+
+                <form th:action="@{/user/contacts/import}" method="post" enctype="multipart/form-data" class="space-y-6">
+                    <div>
+                        <label for="csvFile" class="block w-full">
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer">
+                                <i class="fas fa-cloud-upload-alt text-5xl text-gray-400 mb-4"></i>
+                                <p class="text-gray-600 mb-2">Click to select a CSV file or drag and drop</p>
+                                <p class="text-sm text-gray-500">Maximum file size: 10MB</p>
+                                <p id="fileName" class="hidden mt-4 text-blue-600 font-medium"></p>
+                            </div>
+                        </label>
+                        <input type="file" id="csvFile" name="file" accept=".csv" required class="hidden">
+                    </div>
+
+                    <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+                        <a th:href="@{/user/contacts}" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">Cancel</a>
+                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                            <i class="fas fa-upload mr-2"></i>Import Contacts
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bg-blue-50 p-8 rounded-lg border border-blue-200">
+                <h3 class="text-xl font-semibold text-blue-900 mb-4"><i class="fas fa-info-circle mr-2"></i>CSV Format Instructions</h3>
+                <div class="space-y-4 text-blue-800">
+                    <div>
+                        <h4 class="font-semibold mb-2">Required Columns:</h4>
+                        <ul class="list-disc list-inside space-y-1 ml-4">
+                            <li><code class="bg-blue-100 px-2 py-1 rounded">name</code> - Contact's full name (required)</li>
+                            <li><code class="bg-blue-100 px-2 py-1 rounded">email</code> - Email address (required)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-2">Optional Columns:</h4>
+                        <ul class="list-disc list-inside space-y-1 ml-4">
+                            <li><code class="bg-blue-100 px-2 py-1 rounded">phoneNumber</code> - Phone number</li>
+                            <li><code class="bg-blue-100 px-2 py-1 rounded">address</code> - Physical address</li>
+                            <li><code class="bg-blue-100 px-2 py-1 rounded">description</code> - Notes about the contact</li>
+                            <li><code class="bg-blue-100 px-2 py-1 rounded">websiteLink</code> - Website URL</li>
+                            <li><code class="bg-blue-100 px-2 py-1 rounded">linkedInLink</code> - LinkedIn profile URL</li>
+                            <li><code class="bg-blue-100 px-2 py-1 rounded">favorite</code> - true/false or 1/0</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border border-blue-200">
+                        <h4 class="font-semibold mb-2">Example CSV Format:</h4>
+                        <pre class="text-sm overflow-x-auto"><code>name,email,phoneNumber,address,favorite
+John Doe,john@example.com,+1234567890,123 Main St,true
+Jane Smith,jane@example.com,+0987654321,456 Oak Ave,false</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout(content=~{::#content}, title=~{::#title}, script=~{::#script}, banner=~{::#banner})}">
+<head>
+    <title id="title">Home - Data Manager</title>
+    <th:block id="script">
+        <script>
+            console.log("Home page loaded");
+        </script>
+    </th:block>
+</head>
+<body>
+    <!-- Banner -->
+    <th:block id="banner" th:replace="~{fragments/banner :: hero('Welcome to Data Manager', 'Organize Your Life', 'Manage your contacts and reminders efficiently with our powerful data management system')}"></th:block>
+
+    <div id="content" class="py-12">
+        <div th:fragment="content" class="container mx-auto px-4">
+            <!-- Features Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-address-book text-blue-600 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Contact Management</h3>
+                    <p class="text-gray-600">Store and organize all your contacts in one secure place</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-bell text-green-600 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Smart Reminders</h3>
+                    <p class="text-gray-600">Never miss important dates and tasks with our reminder system</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-purple-600 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Secure & Private</h3>
+                    <p class="text-gray-600">Your data is encrypted and protected with industry-standard security</p>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-12 text-center">
+                <h2 class="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+                <p class="text-xl mb-6">Join thousands of users managing their data efficiently</p>
+                <div class="space-x-4">
+                    <a th:href="@{/signup}" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
+                        Sign Up Free
+                    </a>
+                    <a th:href="@{/about}" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors inline-block">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout(content=~{::#content}, title=~{::#title}, script=~{::#script}, banner=~{::#banner})}">
+<head>
+    <title id="title">Services - Data Manager</title>
+    <th:block id="script">
+        <script>
+            console.log("Services page loaded");
+        </script>
+    </th:block>
+</head>
+<body>
+    <th:block id="banner" th:replace="~{fragments/banner :: simple('Our Services', 'Powerful features to manage your data')}"></th:block>
+
+    <div id="content" class="py-12">
+        <div th:fragment="content" class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Service 1 -->
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-users text-blue-600 text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Contact Management</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Unlimited contact storage</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Custom fields and tags</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Search and filter contacts</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Favorite contacts</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Social media links</li>
+                    </ul>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-calendar-check text-green-600 text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Reminder System</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Set custom reminders</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Link reminders to contacts</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Due date tracking</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Mark as complete</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Reminder notifications</li>
+                    </ul>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-file-import text-purple-600 text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Import & Export</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>CSV file import</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Export to CSV</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Encrypted export option</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Bulk operations</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Data backup</li>
+                    </ul>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-lock text-red-600 text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Security & Privacy</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>End-to-end encryption</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Secure authentication</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>OAuth2 support</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Data privacy compliance</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Regular security updates</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="mt-12 text-center">
+                <h2 class="text-3xl font-bold mb-4">Ready to Experience These Features?</h2>
+                <a th:href="@{/signup}" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors inline-block">
+                    Get Started Now
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

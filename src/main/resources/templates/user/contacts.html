@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout(content=~{::#content}, title=~{::#title}, script=~{::#script}, banner=~{::#banner})}">
+<head>
+    <title id="title">Contacts - Data Manager</title>
+    <th:block id="script">
+        <script>
+            console.log("In User Contacts Page")
+        </script>
+    </th:block>
+</head>
+<body>
+    <!-- Banner Fragment -->
+    <th:block id="banner" th:replace="~{fragments/banner :: simple('Contacts', 'Manage your contact information')}"></th:block>
+
+    <div id="content" class="py-12">
+    <div th:fragment="content" class="max-w-6xl mx-auto space-y-8 px-4">
+        <!-- Success/Error Messages -->
+        <div th:if="${successMessage}" class="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg">
+            <i class="fas fa-check-circle mr-2"></i><span th:text="${successMessage}"></span>
+        </div>
+        <div th:if="${errorMessage}" class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
+            <i class="fas fa-exclamation-circle mr-2"></i><span th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-3xl font-semibold text-gray-800">My Contacts</h2>
+                <p class="text-gray-600">Manage your contact information</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm text-gray-500">Total: <span th:text="${contactCount}" class="font-semibold">0</span> contacts</span>
+                <a th:href="@{/user/contacts/add}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Add Contact
+                </a>
+            </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+            <form method="get" class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1">
+                    <input type="text" name="search" th:value="${searchQuery}" 
+                           placeholder="Search contacts by name, email, or phone..." 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="flex gap-2">
+                    <select name="filter" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Contacts</option>
+                        <option value="favorites" th:selected="${currentFilter == 'favorites'}">Favorites</option>
+                    </select>
+                    <button type="submit" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-search mr-2"></i>Search
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Contacts List -->
+        <div class="bg-white rounded-lg shadow-lg border border-gray-200">
+            <div th:if="${contacts.empty}" class="p-12 text-center">
+                <div class="text-gray-400 text-6xl mb-4">
+                    <i class="fas fa-address-book"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-600 mb-2">No contacts found</h3>
+                <p class="text-gray-500 mb-6">Start by adding your first contact</p>
+                <a th:href="@{/user/contacts/add}" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors inline-block">
+                    <i class="fas fa-plus mr-2"></i>Add Contact
+                </a>
+            </div>
+
+            <div th:if="${!contacts.empty}" class="divide-y divide-gray-200">
+                <div th:each="contact : ${contacts}" class="p-6 hover:bg-gray-50 transition-colors">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800" th:text="${contact.name}">Contact Name</h3>
+                                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                    <span th:if="${contact.email}">
+                                        <i class="fas fa-envelope mr-1"></i>
+                                        <span th:text="${contact.email}">email@example.com</span>
+                                    </span>
+                                    <span th:if="${contact.phoneNumber}">
+                                        <i class="fas fa-phone mr-1"></i>
+                                        <span th:text="${contact.phoneNumber}">+1 (555) 123-4567</span>
+                                    </span>
+                                </div>
+                                <div th:if="${contact.description}" class="text-sm text-gray-600 mt-1" th:text="${contact.description}">Description</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-2">
+                            <span th:if="${contact.favorite}" class="text-yellow-500">
+                                <i class="fas fa-star"></i>
+                            </span>
+                            <div class="flex space-x-2">
+                                <a th:href="@{/user/contacts/view/{id}(id=${contact.id})}" class="text-gray-600 hover:text-gray-800 p-2" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a th:href="@{/user/contacts/edit/{id}(id=${contact.id})}" class="text-blue-600 hover:text-blue-800 p-2" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a th:href="@{/user/reminders(contactId=${contact.id})}" class="text-green-600 hover:text-green-800 p-2" title="Add Reminder">
+                                    <i class="fas fa-bell"></i>
+                                </a>
+                                <form th:action="@{/user/contacts/delete/{id}(id=${contact.id})}" method="post" class="inline" onsubmit="return confirm('Delete this contact?');">
+                                    <button type="submit" class="text-red-600 hover:text-red-800 p-2" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

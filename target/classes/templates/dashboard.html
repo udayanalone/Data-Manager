@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout(content=~{::#content}, title=~{::#title}, script=~{::#script}, banner=~{::#banner})}">
+<head>
+    <title id="title">Dashboard - Data Manager</title>
+    <th:block id="script">
+        <script>
+            console.log("Dashboard loaded");
+        </script>
+    </th:block>
+</head>
+<body>
+    <th:block id="banner" th:replace="~{fragments/banner :: simple('Dashboard', 'Welcome back!')}"></th:block>
+
+    <div id="content" class="py-12">
+        <div th:fragment="content" class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Total Contacts</p>
+                            <p class="text-3xl font-bold" th:text="${contactCount != null ? contactCount : 0}">0</p>
+                        </div>
+                        <i class="fas fa-address-book text-blue-600 text-4xl"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Reminders</p>
+                            <p class="text-3xl font-bold">0</p>
+                        </div>
+                        <i class="fas fa-bell text-green-600 text-4xl"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Favorites</p>
+                            <p class="text-3xl font-bold">0</p>
+                        </div>
+                        <i class="fas fa-star text-yellow-500 text-4xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4">Quick Actions</h3>
+                    <div class="space-y-3">
+                        <a th:href="@{/user/contacts/add}" class="block bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors text-center">
+                            <i class="fas fa-plus mr-2"></i>Add New Contact
+                        </a>
+                        <a th:href="@{/user/reminders}" class="block bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors text-center">
+                            <i class="fas fa-bell mr-2"></i>View Reminders
+                        </a>
+                        <a th:href="@{/user/contacts}" class="block bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 transition-colors text-center">
+                            <i class="fas fa-address-book mr-2"></i>Manage Contacts
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4">Account Info</h3>
+                    <div class="space-y-3">
+                        <p><strong>Name:</strong> <span th:text="${user != null ? user.name : 'User'}">User</span></p>
+                        <p><strong>Email:</strong> <span th:text="${user != null ? user.email : 'email@example.com'}">email@example.com</span></p>
+                        <a th:href="@{/user/profile}" class="inline-block text-blue-600 hover:text-blue-700">View Profile →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
