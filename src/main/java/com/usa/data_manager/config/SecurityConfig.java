@@ -61,6 +61,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/home", "/about", "/service", "/contact",
                                 "/signup", "/register", "/loginPage",
                                 "/css/**", "/js/**", "/images/**", "/static/**").permitAll()
+                .requestMatchers("/user/contacts/export").permitAll() // Allow export without authentication for now
                 .requestMatchers("/user/**", "/dashboard").authenticated()
                 .anyRequest().authenticated()
             )
@@ -83,6 +84,10 @@ public class SecurityConfig {
             )
             .csrf(csrf -> csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .ignoringRequestMatchers(
+                    "/user/contacts/delete/**",
+                    "/user/contacts/export"
+                )
             );
 
         return http.build();
