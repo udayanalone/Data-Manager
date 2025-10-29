@@ -20,9 +20,7 @@ public class ContactService {
     @Autowired
     private ContactRepository contactRepository;
 
-    // Create or save contact
     public Contact saveContact(Contact contact) {
-        // Generate unique contact ID if not present
         if (contact.getId() == null || contact.getId().isEmpty()) {
             contact.setId(UUID.randomUUID().toString());
         }
@@ -31,44 +29,36 @@ public class ContactService {
         return contactRepository.save(contact);
     }
 
-    // Get contact by ID
     public Optional<Contact> getContactById(String id) {
         return contactRepository.findById(id);
     }
 
-    // Get all contacts for a user
     public List<Contact> getContactsByUser(User user) {
         return contactRepository.findByUser(user);
     }
 
-    // Get all contacts by user ID
     public List<Contact> getContactsByUserId(String userId) {
         return contactRepository.findByUserUserId(userId);
     }
 
-    // Get favorite contacts
     public List<Contact> getFavoriteContacts(User user) {
         return contactRepository.findByUserAndFavorite(user, true);
     }
 
-    // Search contacts by name
     public List<Contact> searchContacts(User user, String keyword) {
         return contactRepository.searchByName(user, keyword);
     }
 
-    // Update contact
     public Contact updateContact(Contact contact) {
         logger.info("Updating contact with ID: {}", contact.getId());
         return contactRepository.save(contact);
     }
 
-    // Delete contact by ID
     public void deleteContact(String contactId) {
         logger.info("Deleting contact with ID: {}", contactId);
         contactRepository.deleteById(contactId);
     }
 
-    // Toggle favorite status
     public Contact toggleFavorite(String contactId) {
         Optional<Contact> contactOptional = getContactById(contactId);
         if (contactOptional.isPresent()) {
@@ -79,12 +69,10 @@ public class ContactService {
         return null;
     }
 
-    // Count contacts by user
     public long countContactsByUser(User user) {
         return contactRepository.countByUser(user);
     }
 
-    // Check if contact belongs to user
     public boolean isContactOwnedByUser(String contactId, User user) {
         Optional<Contact> contactOptional = getContactById(contactId);
         if (contactOptional.isPresent()) {

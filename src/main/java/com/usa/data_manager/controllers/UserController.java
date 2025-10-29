@@ -30,10 +30,8 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // User dashboard
     @GetMapping("/dashboard")
     public String userDashboard(Model model) {
-        // Get current authenticated user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
@@ -51,7 +49,6 @@ public class UserController {
         return "user/dashboard";
     }
 
-    // User profile
     @GetMapping("/profile")
     public String userProfile(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -70,7 +67,6 @@ public class UserController {
         return "user/profile";
     }
 
-    // User settings
     @GetMapping("/settings")
     public String userSettings(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -89,7 +85,6 @@ public class UserController {
         return "user/settings";
     }
 
-    // Update user profile settings
     @PostMapping("/settings/update")
     public String updateUserSettings(
             @RequestParam("name") String name,
@@ -106,7 +101,6 @@ public class UserController {
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
                 
-                // Update profile information
                 user.setName(name);
                 user.setPhoneNumber(phoneNumber);
                 user.setAbout(about);
@@ -127,7 +121,6 @@ public class UserController {
         return "redirect:/user/settings";
     }
 
-    // Change password
     @PostMapping("/settings/change-password")
     public String changePassword(
             @RequestParam("currentPassword") String currentPassword,
@@ -139,13 +132,11 @@ public class UserController {
         String email = authentication.getName();
 
         try {
-            // Validate passwords match
             if (!newPassword.equals(confirmPassword)) {
                 redirectAttributes.addFlashAttribute("errorMessage", "New passwords do not match!");
                 return "redirect:/user/settings";
             }
 
-            // Validate password length
             if (newPassword.length() < 6) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Password must be at least 6 characters long!");
                 return "redirect:/user/settings";
@@ -155,13 +146,11 @@ public class UserController {
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
                 
-                // Verify current password
                 if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Current password is incorrect!");
                     return "redirect:/user/settings";
                 }
                 
-                // Update password
                 user.setPassword(passwordEncoder.encode(newPassword));
                 userService.updateUser(user);
                 logger.info("Password changed successfully for: {}", email);
@@ -178,7 +167,6 @@ public class UserController {
         return "redirect:/user/settings";
     }
 
-    // Delete user account
     @PostMapping("/settings/delete-account")
     public String deleteAccount(
             @RequestParam("confirmPassword") String confirmPassword,
@@ -192,17 +180,14 @@ public class UserController {
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
                 
-                // Verify password before deletion
                 if (!passwordEncoder.matches(confirmPassword, user.getPassword())) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Password is incorrect!");
                     return "redirect:/user/settings";
                 }
                 
-                // Delete user
                 userService.deleteUser(user.getUserId());
                 logger.info("Account deleted for user: {}", email);
                 
-                // Logout and redirect to home
                 return "redirect:/logout";
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "User not found!");

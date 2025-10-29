@@ -29,7 +29,6 @@ public class ContactController {
     @Autowired
     private UserService userService;
 
-    // View all contacts
     @GetMapping
     public String viewContacts(
             @RequestParam(value = "search", required = false) String search,
@@ -67,7 +66,6 @@ public class ContactController {
         return "user/contacts";
     }
 
-    // Show add contact form
     @GetMapping("/add")
     public String showAddContactForm(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -84,7 +82,6 @@ public class ContactController {
         return "redirect:/loginPage";
     }
 
-    // Process add contact
     @PostMapping("/add")
     public String addContact(@ModelAttribute Contact contact, RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -108,7 +105,6 @@ public class ContactController {
         return "redirect:/user/contacts";
     }
 
-    // Show edit contact form
     @GetMapping("/edit/{contactId}")
     public String showEditContactForm(@PathVariable String contactId, Model model, RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -122,7 +118,6 @@ public class ContactController {
             if (contactOptional.isPresent()) {
                 Contact contact = contactOptional.get();
                 
-                // Check if contact belongs to user
                 if (contactService.isContactOwnedByUser(contactId, user)) {
                     model.addAttribute("user", user);
                     model.addAttribute("contact", contact);
@@ -139,7 +134,6 @@ public class ContactController {
         return "redirect:/user/contacts";
     }
 
-    // Process update contact
     @PostMapping("/update/{contactId}")
     public String updateContact(@PathVariable String contactId, @ModelAttribute Contact contact, RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -169,7 +163,6 @@ public class ContactController {
         return "redirect:/user/contacts";
     }
 
-    // View contact details
     @GetMapping("/view/{contactId}")
     public String viewContactDetails(@PathVariable String contactId, Model model, RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -198,7 +191,6 @@ public class ContactController {
         return "redirect:/user/contacts";
     }
 
-    // Delete contact
     @PostMapping("/delete/{contactId}")
     public String deleteContact(@PathVariable String contactId, RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -225,7 +217,6 @@ public class ContactController {
         return "redirect:/user/contacts";
     }
 
-    // Toggle favorite
     @PostMapping("/favorite/{contactId}")
     public String toggleFavorite(@PathVariable String contactId, RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

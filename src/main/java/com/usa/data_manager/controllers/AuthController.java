@@ -30,20 +30,17 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    // Show registration form
     @GetMapping("/signup")
     public String showRegistrationForm(Model model) {
         model.addAttribute("userRegistrationDto", new UserRegistrationDto());
         return "auth/signup";
     }
 
-    // Redirect /register GET requests to /signup
     @GetMapping("/register")
     public String redirectToSignup() {
         return "redirect:/signup";
     }
 
-    // Process registration
     @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("userRegistrationDto") UserRegistrationDto registrationDto,
                               BindingResult bindingResult,
@@ -52,7 +49,6 @@ public class AuthController {
 
         logger.info("Processing registration for email: {}", registrationDto.getEmail());
 
-        // Check for validation errors
         if (bindingResult.hasErrors()) {
             logger.error("Validation errors during registration:");
             bindingResult.getAllErrors().forEach(error -> 
@@ -62,7 +58,6 @@ public class AuthController {
             return "auth/signup";
         }
 
-        // Check if passwords match
         if (!registrationDto.isPasswordMatching()) {
             model.addAttribute("error", "Passwords do not match");
             model.addAttribute("userRegistrationDto", registrationDto);
@@ -70,29 +65,26 @@ public class AuthController {
         }
 
         try {
-            // Check if user already exists
             if (userService.isUserExistByEmail(registrationDto.getEmail())) {
                 model.addAttribute("error", "User with this email already exists");
                 model.addAttribute("userRegistrationDto", registrationDto);
                 return "auth/signup";
             }
 
-            // Create new user
             User user = User.builder()
                 .name(registrationDto.getName())
                 .email(registrationDto.getEmail())
-                .password(registrationDto.getPassword()) // Will be encoded in UserService
+                .password(registrationDto.getPassword())
                 .phoneNumber(registrationDto.getPhoneNumber())
                 .about(registrationDto.getAbout())
-                .enabled(true) // Enable user by default
+                .enabled(true)
                 .emailVerified(false)
                 .phoneVerified(false)
-                .provider(Providers.SELF) // Local provider
+                .provider(Providers.SELF)
                 .emailNotifications(true)
                 .twoFactorEnabled(false)
                 .build();
 
-            // Register user
             User savedUser = userService.registerUser(user);
             logger.info("User registered successfully with ID: {}", savedUser.getUserId());
 
@@ -107,7 +99,6 @@ public class AuthController {
         }
     }
 
-    // Show login form
     @GetMapping("/loginPage")
     public String showLoginForm(@RequestParam(value = "error", required = false) String error,
                                @RequestParam(value = "logout", required = false) String logout,
@@ -125,11 +116,9 @@ public class AuthController {
         return "auth/login";
     }
 
-    // Dashboard (protected page)
     @GetMapping("/dashboard")
     public String dashboard(Model model, HttpSession session) {
         try {
-            // Get current authenticated user
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String email = authentication.getName();
             
